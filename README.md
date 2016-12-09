@@ -36,7 +36,7 @@ Enable a virtualenv
   - $ virtualenv virtualenv
   - $ source venv/bin/activate
 
-Python Setup
+Python Setup  
   - $ python setup.py install
   or
   - add `comingsoon` to your PYTHONPATH
