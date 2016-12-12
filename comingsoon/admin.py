@@ -13,7 +13,7 @@ class IgnoredURLInline(admin.TabularInline):
 class ComingsoonAdmin(admin.ModelAdmin):
     inlines = [IgnoredURLInline]
     list_display = ['__str__', 'active', 'site', 'start', 'end']
-    readonly_fields = ('site',)
+    #readonly_fields = ('site',)
 
     #disable actions
     #actions = None

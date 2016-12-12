@@ -5,7 +5,7 @@ from django.contrib.sites.models import Site
 
 class Comingsoon(models.Model):
     name = models.CharField(max_length=255)
-    site = models.ForeignKey(Site)
+    site = models.ForeignKey(Site, null=True, blank=True)
     active = models.BooleanField('Coming Soon Mode', default=False)
     # count down fields
     start = models.DateTimeField(blank=True)
