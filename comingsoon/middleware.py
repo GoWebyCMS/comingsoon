@@ -6,42 +6,47 @@ from django.core import urlresolvers
 from django.db.utils import DatabaseError
 import django.conf.urls as urls
 
-from comingsoon.models import Comingsoon, IgnoreURL
-from comingsoon.utils.settings import (DJANGO_MINOR_VERSION, SITEDOWN_ADMIN_IGNORED_URLS)
+from comingsoon.models import Maintenance, IgnoredURL
+from comingsoon.utils.settings import (
+    DJANGO_MINOR_VERSION, MAINTENANCE_ADMIN_IGNORED_URLS)
 
-urls.handler503 = 'comingsoon.views.503.site_down'
+urls.handler503 = 'maintenancemode.views.defaults.temporary_unavailable'
 urls.__all__.append('handler503')
 
 
-class ComingsoonModelMiddleware(object):
+class MaintenanceModeMiddleware(object):
     def process_request(self, request):
-        # Fetch the comingsoon mode from the database
-        # At this point at least one contrib sites setting is requiered
+        """
+        Get the maintenance mode from the database.
+        If a Maintenance value doesn't already exist in the database, we'll create one.
+        "has_add_permission" and "has_delete_permission" are overridden in admin
+        to prevent the user from adding or deleting a record, as we only need one
+        to affect multiple sites managed from one instance of Django admin.
+        """
         site = Site.objects.get_current()
 
-        # If the value doesn't exist in the database create one
         try:
-            comingsoon = Comingsoon.objects.get(site=site)
-        except(Comingsoon.DoesNotExist, DatabaseError):
+            maintenance = Maintenance.objects.get(site=site)
+        except (Maintenance.DoesNotExist, DatabaseError):
             for site in Site.objects.all():
-                comingsoon = Comingsoon.objects.create(site=site, active=False)
+                maintenance = Maintenance.objects.create(site=site, is_being_performed=False)
 
-        # Add access exceptions
-        # 1 Allow access if comingsoon is innactive
-        if not comingsoon.active:
+        # Allow access if maintenance is not being performed
+        if not maintenance.is_being_performed:
             return None
 
-        # 2 Allow access user doing the current request is verified and logged in user
-        if hasattr(request, 'user') and request.user.is_staff:
-            return None
-
-        # 3 Allow access if remote ip is in INTERNAL_IPS
+        # Allow access if remote ip is in INTERNAL_IPS
         if request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return None
 
-        # URL exceptions
-        # Check if any paths explicitly excluded from sitedown mode
-        ignored_url_list = [str(url.pattern) for url in IgnoreURL.objects.filter(comingsoon=comingsoon)]
+        # Allow access if the user doing the request is logged in and a
+        # staff member.
+        if hasattr(request, 'user') and request.user.is_staff:
+            return None
+
+        # Check if a path is explicitly excluded from maintenance mode
+        ignored_url_list = [str(url.pattern) for url in
+            IgnoredURL.objects.filter(maintenance=maintenance)] + MAINTENANCE_ADMIN_IGNORED_URLS
 
         ignored_url_patterns = tuple([re.compile(r'%s' % url) for url in ignored_url_list])
         request_path = request.path_info[1:]

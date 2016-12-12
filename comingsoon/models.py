@@ -1,26 +1,23 @@
-from django.db import models
 from django.contrib.sites.models import Site
+from django.db import models
+from django.db.models.signals import post_save, pre_save, pre_delete
+from django.template.defaultfilters import join
 
-# Create your models here.
 
-class Comingsoon(models.Model):
-    site = models.ForeignKey(Site, null=True, blank=True)
-    active = models.BooleanField('Coming Soon Mode', default=False)
-    # count down fields
-    start = models.DateTimeField(blank=True)
-    end = models.DateTimeField(blank=True)
+class Maintenance(models.Model):
+    site = models.ForeignKey(Site)
+    is_being_performed = models.BooleanField('In Maintenance Mode', default=False)
 
     class Meta:
-        verbose_name = 'Coming Soon'
-        verbose_name_plural = 'Coming Soon'
+        verbose_name = verbose_name_plural = 'Maintenance Mode'
 
     def __str__(self):
         return self.site.domain
 
-class IgnoreURL(models.Model):
-    comingsoon = models.ForeignKey(Comingsoon)
-    pattern = models.CharField(max_length=200)
-    about = models.CharField(max_length=100, help_text="About this URL")
+class IgnoredURL(models.Model):
+    maintenance = models.ForeignKey(Maintenance)
+    pattern = models.CharField(max_length=255)
+    description = models.CharField(max_length=75, help_text='What this URL pattern covers.')
 
     def __str__(self):
         return self.pattern

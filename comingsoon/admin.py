@@ -1,22 +1,18 @@
 from django.contrib import admin
 
-from .models import Comingsoon, IgnoreURL
-
-# Customize Models for Admin
+from comingsoon.models import Maintenance, IgnoredURL
 
 
 class IgnoredURLInline(admin.TabularInline):
-    model = IgnoreURL
-    extra = 2
+    model = IgnoredURL
+    extra = 3
 
 
-class ComingsoonAdmin(admin.ModelAdmin):
-    inlines = [IgnoredURLInline]
-    list_display = ['__str__', 'active', 'site', 'start', 'end']
+class MaintenanceAdmin(admin.ModelAdmin):
+    inlines = [IgnoredURLInline, ]
+    list_display = ['__str__', 'is_being_performed']
     readonly_fields = ('site',)
-
-    #disable actions
-    #actions = None
+    actions = None
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -24,6 +20,4 @@ class ComingsoonAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-# Register Models
-
-admin.site.register(Comingsoon, ComingsoonAdmin)
+admin.site.register(Maintenance, MaintenanceAdmin)
