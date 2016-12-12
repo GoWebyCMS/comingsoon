@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('sites', '0002_alter_domain_unique'),
+        ('sites', '0001_initial'),
     ]
 
     operations = [
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('active', models.BooleanField(default=False, verbose_name='Coming Soon Mode')),
                 ('start', models.DateTimeField(blank=True)),
                 ('end', models.DateTimeField(blank=True)),
-                ('site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sites.Site')),
+                ('site', models.ForeignKey(to='sites.Site')),
             ],
             options={
                 'verbose_name_plural': 'Coming Soon',
