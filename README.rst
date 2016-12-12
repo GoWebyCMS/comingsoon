@@ -17,19 +17,16 @@ The coming soon falg is stord in the projects database as a BoolianField. That m
 You must have at least one Site entry in your database **before** installing Comingsoon.
 
 ## Supported Django Versions
+- 1.10
 - 1.9
-- 1.8
-- 1.7
-- 1.6
-- 1.5 or below *should* work, but come on, it's time to upgrade :)
 
 ## Installation
 TODO: configure installation via pip
-- `pip install comingsoon`
+  - `pip install comingsoon`
 
 -- or --
 
-Download Coming Soon from [source](https://github.com/)
+Download Coming Soon from [source](https://github.com/Django-Hatchery/hatchery-comingsoon/archive/master.zip)
 
 Enable a virtualenv
 
