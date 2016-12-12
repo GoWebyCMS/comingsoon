@@ -4,7 +4,6 @@ from django.contrib.sites.models import Site
 # Create your models here.
 
 class Comingsoon(models.Model):
-    name = models.CharField(max_length=255)
     site = models.ForeignKey(Site, null=True, blank=True)
     active = models.BooleanField('Coming Soon Mode', default=False)
     # count down fields
@@ -16,7 +15,7 @@ class Comingsoon(models.Model):
         verbose_name_plural = 'Coming Soon'
 
     def __str__(self):
-        return self.name
+        return self.site.domain
 
 class IgnoreURL(models.Model):
     comingsoon = models.ForeignKey(Comingsoon)

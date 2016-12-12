@@ -40,7 +40,7 @@ Python Setup
 
 ## Settings and Required Values
 - Ensure the [Sites Framework](https://docs.djangoproject.com/en/1.8/ref/contrib/sites/) is enabled and that you have at least one entry in the Sites table.
-- Add `comingsoon.middleware.ComingsoonModeMiddleware` to your `MIDDLEWARE_CLASSES`
+- Add `comingsoon.middleware.ComingsoonModelMiddleware` to your `MIDDLEWARE_CLASSES`
 - Add `comingsoon` to your `INSTALLED_APPS`
 - Run `python manage.py migrate` to create the `comingsoon` database tables.
 - Run your project to automatically add the `comingsoon` database records.
