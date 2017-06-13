@@ -1,5 +1,5 @@
 # Coming Soon Django Application
-## Initially developed for Django Hatchery CMS
+## Initially developed for Go Weby CMS
 
 [![Build Status]
 
@@ -26,7 +26,7 @@ TODO: configure installation via pip
 
 -- or --
 
-Download Coming Soon from [source](https://github.com/Django-Hatchery/hatchery-comingsoon/archive/master.zip)
+Download Coming Soon from [source](https://github.com/Django-Hatchery/goweby-comingsoon/archive/master.zip)
 
 Enable a virtualenv
 
